@@ -40,7 +40,7 @@ export async function loader({ request, params }) {
     });
   }
 
-  return json(await getQRCode(Number(params.id), admin.graphql));
+  return json(await getQRCode(params.id, admin.graphql));
 }
 
 export async function action({ request, params }) {
