@@ -3,7 +3,7 @@
 client_id = "ebc684e2d8bd2f36055b7965f9755822"
 name = "my-custom-app"
 handle = "my-custom-app-103"
-application_url = "https://marco-indicating-native-keyboards.trycloudflare.com"
+application_url = "https://versus-benefits-extreme-ctrl.trycloudflare.com"
 embedded = true
 
 [access_scopes]
@@ -12,9 +12,9 @@ scopes = "write_products"
 
 [auth]
 redirect_urls = [
-  "https://marco-indicating-native-keyboards.trycloudflare.com/auth/callback",
-  "https://marco-indicating-native-keyboards.trycloudflare.com/auth/shopify/callback",
-  "https://marco-indicating-native-keyboards.trycloudflare.com/api/auth/callback"
+  "https://versus-benefits-extreme-ctrl.trycloudflare.com/auth/callback",
+  "https://versus-benefits-extreme-ctrl.trycloudflare.com/auth/shopify/callback",
+  "https://versus-benefits-extreme-ctrl.trycloudflare.com/api/auth/callback"
 ]
 
 [webhooks]
