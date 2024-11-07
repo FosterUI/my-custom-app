@@ -27,21 +27,25 @@ import {
 } from "@shopify/polaris";
 import { ImageIcon } from "@shopify/polaris-icons";
 
-import db from "../db.server";
-import { getQRCode, validateQRCode } from "../models/QRCode.server";
+// Remove server-only imports from the top level
+// import db from "../db.server";
+// import { getQRCode, validateQRCode } from "../models/QRCode.server";
 
 export async function loader({ request, params }) {
-  const { admin } = await authenticate.admin(request);
-
-  if (params.id === "new") {
-    return json({
-      destination: "product",
-      title: "",
-    });
+    // Import server-only modules inside the loader
+    const { getQRCode } = await import("../models/QRCode.server");
+    const { admin } = await authenticate.admin(request);
+  
+    if (params.id === "new") {
+      return json({
+        destination: "product",
+        title: "",
+      });
+    }
+  
+    const qrCode = await getQRCode(params.id, admin.graphql);
+    return json(qrCode);
   }
-
-  return json(await getQRCode(params.id, admin.graphql));
-}
 
 export async function action({ request, params }) {
   const { session } = await authenticate.admin(request);
