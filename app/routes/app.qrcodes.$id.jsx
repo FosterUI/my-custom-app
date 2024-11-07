@@ -47,22 +47,37 @@ export async function loader({ request, params }) {
     return json(qrCode);
   }
 
-export async function action({ request, params }) {
-  const { session } = await authenticate.admin(request);
-  const { shop } = session;
-
-  const data = {
-    ...Object.fromEntries(await request.formData()),
-    shop,
-  };
-
-  if (data.action === "delete") {
-    await db.qRCode.delete({ where: { id: params.id } });
-    return redirect("/app");
+  export async function action({ request, params }) {
+    // Import server-only modules inside the action
+    const { validateQRCode } = await import("../models/QRCode.server");
+    const db = (await import("../db.server")).default;
+    const { session } = await authenticate.admin(request);
+    const { shop } = session;
+  
+    const formData = Object.fromEntries(await request.formData());
+    const data = { ...formData, shop };
+  
+    if (data.action === "delete") {
+      await db.qRCode.delete({ where: { id: params.id } });
+      return redirect("/app");
+    }
+  
+    const errors = validateQRCode(data);
+    if (errors) {
+      return json({ errors }, { status: 422 });
+    }
+  
+    if (params.id === "new") {
+      await db.qRCode.create({ data });
+      return redirect("/app");
+    } else {
+      await db.qRCode.update({
+        where: { id: params.id },
+        data,
+      });
+      return redirect(`/app/qrcodes/${params.id}`);
+    }
   }
-
-  // ...
-}
 
 export default function QRCodeForm() {
   const errors = useActionData()?.errors || {};
